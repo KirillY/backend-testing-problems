@@ -39,13 +39,6 @@ def insert_many(con, table_name: str, field_template: str, table: [(str)]):
     con.executemany("INSERT INTO {} VALUES {}".format(table_name, field_template), table)
 
 
-def select_check(con, field: str, value: str, table_name: str):
-    con_cursor = con.cursor()
-    t = (value,)
-    con_cursor.execute("SELECT * FROM {} WHERE {}=?".format(table_name, field), t)
-    print(con_cursor.fetchone())
-
-
 def prepare_db_tables(con, *table_data_seq):
     for table_data in table_data_seq:
         lines = read(table_data.file)
@@ -54,9 +47,26 @@ def prepare_db_tables(con, *table_data_seq):
         insert_many(con, table_name=table_data.tablename, field_template=table_data.fields_template, table=table)
 
 
+def select_check(con, field: str, value: str, table_name: str):
+    con_cursor = con.cursor()
+    t = (value,)
+    con_cursor.execute("SELECT * FROM {} WHERE {}=?".format(table_name, field), t)
+    print(con_cursor.fetchone())
+
+
+def select_join(con):
+    """Вывести email, имя и сумму всех покупок подтвержденных пользователей за 2 и 3 сентября"""
+    con_cursor = con.cursor()
+    t = ('t',)
+    con_cursor.execute("SELECT users.id FROM users INNER JOIN purchases ON users.id = purchases.user_id")
+    view_data = con_cursor.fetchall()
+    print(view_data)
+
+
 if __name__ == "__main__":
     con = create_db_connection()
     with con:
         prepare_db_tables(con, USERS, PURCHASES)
         select_check(con, field="name", value="Vasia", table_name=USERS.tablename)
         select_check(con, field="item_id", value="1345", table_name=PURCHASES.tablename)
+        select_join(con)
