@@ -1,0 +1,4 @@
+1 | t | vasia@test.ru<mailto:vasia@test.ru> | Vasia
+2 | f | tania@test.ru<mailto:tania@test.ru> | Tania
+3 | t | boris@test.ru<mailto:boris@test.ru> | Boris
+4 | t | damir@test.ru<mailto:damir@test.ru> | Damir
