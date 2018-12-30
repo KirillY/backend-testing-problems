@@ -6,13 +6,13 @@ Probation project
 
 ##### Clone the repo
 
-##### Switch to the project dir
-```bash
-cd yourproject
-```
 ##### Clone the project 
 ```bash
 git clone https://github.com/KirillY/backend-testing-project.git
+```
+##### Switch to the project dir
+```bash
+cd backend-testing-project
 ```
 ##### Option 1: Install pipenv, create virtual environment, switch to it and install all dependencies
 ```bash
