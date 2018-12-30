@@ -21,7 +21,7 @@ pipenv --python 3.7
 pipenv shell
 pipenv install --dev
 ```
-##### Option 2: More traditional workflow without pipenv (Unix)
+##### Option 2: Using venv+pip instead of pipenv (Unix)
 ```bash
 virtualenv -p /usr/bin/python3 venv/
 . venv/bin/activate
