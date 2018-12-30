@@ -14,7 +14,7 @@ cd yourproject
 ```bash
 git clone https://github.com/KirillY/backend-testing-project.git
 ```
-##### Option 1: Install pipenv, create virtual environment, switch and install all dependencies
+##### Option 1: Install pipenv, create virtual environment, switch to it and install all dependencies
 ```bash
 pip install pipenv
 pipenv --python 3.7
@@ -35,20 +35,27 @@ pip install -r requirements.txt
 cd sql_project
 python join_users_purchases.py
 ```
-##### Problem 1.2: build bash script using wget
+##### Problem 1.2: build bash script using wget (Unix)
 ```bash
+cd bash_project
+rm -r pic
 cat test2.txt | cut -d' ' -f3 > img_urls
-wget -i img_urls -P pic && rm img_urls
+wget -i img_urls -P pic && rm img_urls && ll pic
 ```
 ##### Problem 1.3: test HTTP API
-```python
-```
-##### Problem 2: build framework for a Google Places API testing
-```python
-```
-## Run tests
+##### run and follow localhost link to inspect .md document
 ```bash
-pytest -v
+pipenv install grip
+cd http_api_project
+grip solution_description.md
+```
+##### Problem 2: build testing framework for a Google Places API
+```bash
+
+```
+## Run internal tests
+```bash
+python -m pytest -v
 ```
 
 ## License
