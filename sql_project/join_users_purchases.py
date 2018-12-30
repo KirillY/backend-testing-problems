@@ -57,10 +57,17 @@ def select_check(con, field: str, value: str, table_name: str):
 def select_join(con):
     """Вывести email, имя и сумму всех покупок подтвержденных пользователей за 2 и 3 сентября"""
     con_cursor = con.cursor()
-    t = ('t',)
-    con_cursor.execute("SELECT users.id FROM users INNER JOIN purchases ON users.id = purchases.user_id")
-    view_data = con_cursor.fetchall()
-    print(view_data)
+    con_cursor.execute(
+        "SELECT users.email, users.name, purchases.sum FROM users "
+        "INNER JOIN purchases ON users.id = purchases.user_id "
+        "WHERE purchases.date LIKE '2017-09-02%' OR purchases.date LIKE '2017-09-03%' "
+        "AND users.confirmed='t'")
+    return con_cursor.fetchall()
+
+
+def display(query):
+    for obj in query:
+        print(obj)
 
 
 if __name__ == "__main__":
@@ -69,4 +76,5 @@ if __name__ == "__main__":
         prepare_db_tables(con, USERS, PURCHASES)
         select_check(con, field="name", value="Vasia", table_name=USERS.tablename)
         select_check(con, field="item_id", value="1345", table_name=PURCHASES.tablename)
-        select_join(con)
+        join_result = select_join(con)
+    display(join_result)

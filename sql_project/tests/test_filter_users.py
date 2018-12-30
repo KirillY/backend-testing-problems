@@ -1,4 +1,4 @@
-from sql_project.filter_users import read, parse
+from sql_project.join_users_purchases import read, parse
 from unittest.mock import patch, mock_open
 
 
