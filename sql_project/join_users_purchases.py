@@ -3,10 +3,10 @@ from collections import namedtuple
 
 DATABASE = ":memory:"
 
-NAMEDTUPLE_FIELDS = ["table_name", "file", "fields",]
+NAMEDTUPLE_FIELDS = ["table_name", "file", "fields", ]
 Users, Purchases = namedtuple("Users", NAMEDTUPLE_FIELDS), namedtuple("Purchases", NAMEDTUPLE_FIELDS)
-USERS = Users("users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))",)
-PURCHASES = Purchases("purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)",)
+USERS = Users("users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))", )
+PURCHASES = Purchases("purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)", )
 
 
 def read(txt_file):
@@ -35,7 +35,7 @@ def insert_many(con, table_name: str, table: [(str)]):
     con_cursor = con.cursor()
     con_cursor.execute("PRAGMA table_info({})".format(table_name))
     field_count = len(con_cursor.fetchall())
-    field_template = '({})'.format(','.join(['?']*field_count))
+    field_template = '({})'.format(','.join(['?'] * field_count))
     con.executemany("INSERT INTO {} VALUES {}".format(table_name, field_template), table)
 
 
@@ -45,9 +45,6 @@ def prepare_db_tables(con, *table_obj_seq):
         table = parse(lines)
         create_db_table(con, table_name=table_obj.table_name, table_fields=table_obj.fields)
         insert_many(con, table_name=table_obj.table_name, table=table)
-
-
-
 
 
 def select_join(con):
@@ -71,7 +68,6 @@ if __name__ == "__main__":
     con = create_db_connection()
     with con:
         prepare_db_tables(con, USERS, PURCHASES)
-        # select_check(con, field="name", value="Vasia", table_name=USERS.table_name)
-        # select_check(con, field="item_id", value="1345", table_name=PURCHASES.table_name)
         join_result = select_join(con)
     display(join_result)
+    assert len(join_result) == 13
