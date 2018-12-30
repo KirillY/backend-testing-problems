@@ -3,14 +3,10 @@ from collections import namedtuple
 
 DATABASE = ":memory:"
 
-NAMEDTUPLE_FIELDS = ["tablename", "file", "fields", "fields_template"]
+NAMEDTUPLE_FIELDS = ["table_name", "file", "fields",]
 Users, Purchases = namedtuple("Users", NAMEDTUPLE_FIELDS), namedtuple("Purchases", NAMEDTUPLE_FIELDS)
-USERS = Users(
-    "users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))", "(?, ?, ?, ?)",
-)
-PURCHASES = Purchases(
-    "purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)", "(?, ?, ?, ?, ?)",
-)
+USERS = Users("users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))",)
+PURCHASES = Purchases("purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)",)
 
 
 def read(txt_file):
@@ -35,23 +31,23 @@ def create_db_table(con, table_name: str, table_fields: str):
     con.execute("create table {} {}".format(table_name, table_fields))
 
 
-def insert_many(con, table_name: str, field_template: str, table: [(str)]):
+def insert_many(con, table_name: str, table: [(str)]):
+    con_cursor = con.cursor()
+    con_cursor.execute("PRAGMA table_info({})".format(table_name))
+    field_count = len(con_cursor.fetchall())
+    field_template = '({})'.format(','.join(['?']*field_count))
     con.executemany("INSERT INTO {} VALUES {}".format(table_name, field_template), table)
 
 
-def prepare_db_tables(con, *table_data_seq):
-    for table_data in table_data_seq:
-        lines = read(table_data.file)
+def prepare_db_tables(con, *table_obj_seq):
+    for table_obj in table_obj_seq:
+        lines = read(table_obj.file)
         table = parse(lines)
-        create_db_table(con, table_name=table_data.tablename, table_fields=table_data.fields)
-        insert_many(con, table_name=table_data.tablename, field_template=table_data.fields_template, table=table)
+        create_db_table(con, table_name=table_obj.table_name, table_fields=table_obj.fields)
+        insert_many(con, table_name=table_obj.table_name, table=table)
 
 
-def select_check(con, field: str, value: str, table_name: str):
-    con_cursor = con.cursor()
-    t = (value,)
-    con_cursor.execute("SELECT * FROM {} WHERE {}=?".format(table_name, field), t)
-    print(con_cursor.fetchone())
+
 
 
 def select_join(con):
@@ -61,7 +57,8 @@ def select_join(con):
         "SELECT users.email, users.name, purchases.sum FROM users "
         "INNER JOIN purchases ON users.id = purchases.user_id "
         "WHERE purchases.date LIKE '2017-09-02%' OR purchases.date LIKE '2017-09-03%' "
-        "AND users.confirmed='t'")
+        "AND users.confirmed='t'"
+    )
     return con_cursor.fetchall()
 
 
@@ -74,7 +71,7 @@ if __name__ == "__main__":
     con = create_db_connection()
     with con:
         prepare_db_tables(con, USERS, PURCHASES)
-        select_check(con, field="name", value="Vasia", table_name=USERS.tablename)
-        select_check(con, field="item_id", value="1345", table_name=PURCHASES.tablename)
+        # select_check(con, field="name", value="Vasia", table_name=USERS.table_name)
+        # select_check(con, field="item_id", value="1345", table_name=PURCHASES.table_name)
         join_result = select_join(con)
     display(join_result)
