@@ -30,12 +30,15 @@ pip install -r requirements.txt
 
 ## Usage
 ### 
-##### Problem 1.1: execute an SQL query
+##### Problem 1.1: execute an SQL query using join
 ```bash
-python ./sql_project/filter_users.py
+cd sql_project
+python join_users_purchases.py
 ```
-##### Problem 1.2: run bash script
-```python
+##### Problem 1.2: build bash script using wget
+```bash
+cat test2.txt | cut -d' ' -f3 > img_urls
+wget -i img_urls -P pic && rm img_urls
 ```
 ##### Problem 1.3: test HTTP API
 ```python
