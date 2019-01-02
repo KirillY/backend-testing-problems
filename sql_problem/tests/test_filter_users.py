@@ -4,7 +4,7 @@ from unittest.mock import patch, mock_open
 
 import pytest
 
-from sql_project.join_users_purchases import read, parse, prepare_db_tables
+from sql_problem.join_users_purchases import read, parse, prepare_db_tables
 
 
 @pytest.fixture()
