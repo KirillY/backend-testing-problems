@@ -1,26 +1,31 @@
-## Что нужно уточнить перед началом тестирования?
+## Что нужно уточнить перед началом тестирования? (What should be done before the testing begins?)
 
-- Requirements? -- corresponds or not?
-- Specifications? -- what are typical usage scenarios? context?
-- Authentication type
-- Server type (development, testing, staging, production) -- performance and environment limitations
+##### Learn project environment and risk oracles
+- Familiarizing yourself with the product (probably taking UI tour)
+- Ask PM (or a person for whom quality is a value) about potential concerns or risks -- i.e. clear quality criteria
+- Study requirements documentation
+- Study API specifications (paying attention at authentication type, error codes and messages list)
+- Discuss typical use cases with developers
+- Clear server type (development, testing, staging, production) -- performance and environment limitations
 
-## Как вы будете ее тестировать?
+## Как вы будете ее тестировать? (What testing may include?)
 
-#### Smoke testing
+#### 1. Smoke testing
 
-###### Positive
-* check if server responds -- response code in [2xx, 3xx, 4xx]
-* send required params only (=session) -- check json payload scheme
+1.1 check if server responds for request with or without params (just GET /purchases) -- response code in [2xx, 3xx, 4xx]
 
-#### Functional testing
+1.2 send required params only (GET /purcharses/?session=sessionId) -- check json payload scheme
 
-###### Positive
+1.3 if (1.1.2) is not working -- remove slash before query string https://stackoverflow.com/questions/1617058/ok-to-skip-slash-before-query-string
+
+#### 2. Functional testing
+
+##### 2.1 Positive
 * send all=True&type=None -- check payload include non-active purchases
 * send all=None&type=<type> -- check payload corresponds to purchases type
 * send all=True&type=<type> -- check payload for activity AND type
 
-###### Negative
+##### 2.2 Negative
 * Sending a request without the proper authorization -- high priority!!!
 * Sending a request with the wrong HTTP verb
 * Sending a request with the wrong endpoint
@@ -37,13 +42,12 @@
 #### Performance testing
 * Use Locust https://habr.com/company/infopulse/blog/430502/
 
-## Это пост или гет запрос?
+## Это пост или гет запрос? (Is it a POST or GET request?)
 It is possible to combine POST with a query string, so we cannot say for sure without a method definition
 https://stackoverflow.com/questions/14710061/is-it-valid-to-combine-a-form-post-with-a-query-string/14710450
 
-## Какой тип данных может передаваться в параметре all?
+## Какой тип данных может передаваться в параметре all? (What data type could be transferred with 'all' parameter?)
 Practically any data type that could be processed by a client or a server (depending encoding/decoding used)
 The HTTP protocol is not restricted on length https://stackoverflow.com/questions/812925/what-is-the-maximum-possible-length-of-a-query-string
-
 
 
