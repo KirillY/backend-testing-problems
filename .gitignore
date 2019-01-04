@@ -1,3 +1,6 @@
 .idea/
 venv/
 bash_project/pic/
+Problems.ipynb
+__pycache__
+*ipynb_checkpoints
