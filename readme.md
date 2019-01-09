@@ -6,7 +6,7 @@ Probation project
 
 ##### Clone the project 
 ```bash
-git clone https://github.com/KirillY/backend-testing-problemsgit
+git clone https://github.com/KirillY/backend-testing-problems.git
 ```
 ##### Switch to the project dir
 ```bash
@@ -25,8 +25,18 @@ virtualenv -p /usr/bin/python3 venv/
 . venv/bin/activate
 pip install -r requirements.txt
 ```
+##### Option 3: Using docker
+install docker https://docs.docker.com/engine/installation/
+```bash
+docker-compose build
+docker-compose up
+```
+copy and paste provided url into your browser, 
+run Jupyter cells using Ctrl+Enter 
 
-## Usage
+Ctrl+C in terminal to end up Jupyter session
+
+## Usage (Option 1 or 2)
 ### 
 ##### Problem 1.1: execute an SQL query using join
 ```bash
