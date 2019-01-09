@@ -31,8 +31,9 @@ install docker https://docs.docker.com/engine/installation/
 docker-compose build
 docker-compose up
 ```
-copy and paste provided url into your browser, 
-run Jupyter cells using Ctrl+Enter 
+copy and paste provided url into your browser to run Jupyter
+
+run ```main.ipynb``` in Jupyter, execute cells using Ctrl+Enter
 
 Ctrl+C in terminal to end up Jupyter session
 
