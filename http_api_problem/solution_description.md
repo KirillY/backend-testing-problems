@@ -43,7 +43,8 @@
 * Use Locust https://habr.com/company/infopulse/blog/430502/
 
 ## Это пост или гет запрос? (Is it a POST or GET request?)
-It is possible to combine POST with a query string, so we cannot say for sure without a method definition
+Technically it's a GET request.
+Although it is possible to combine POST with a query string and GET with a body content, so the behavior can vary.
 https://stackoverflow.com/questions/14710061/is-it-valid-to-combine-a-form-post-with-a-query-string/14710450
 
 ## Какой тип данных может передаваться в параметре all? (What data type could be transferred with 'all' parameter?)

@@ -71,8 +71,7 @@ if __name__ == "__main__":
     INNER JOIN users ON users.id = purchases.user_id \
     WHERE confirmed='t' \
     AND purchases.date LIKE '2017-09-02%' OR purchases.date LIKE '2017-09-03%' \
-    GROUP BY name
-    """
+    GROUP BY name"""
     con = create_db_connection()
     with con:
         prepare_db_tables(con, USERS_META, PURCHASES_META)
