@@ -49,7 +49,7 @@ python join_users_purchases.py
 cd bash_problem
 rm -r pic
 cat test2.txt | cut -d' ' -f3 > img_urls
-wget -i img_urls -P pic && rm img_urls && ll pic
+wget -i img_urls -P pic && rm img_urls && ls -lah pic
 ```
 ##### Problem 1.3: test HTTP API
 ##### run and follow localhost link to inspect .md document
