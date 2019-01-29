@@ -58,10 +58,6 @@ pipenv install grip
 cd http_api_problem
 grip solution_description.md
 ```
-##### Problem 2: build testing framework for a Google Places API
-```bash
-
-```
 ## Run internal tests
 ```bash
 python -m pytest -v
