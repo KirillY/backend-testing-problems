@@ -1,12 +1,13 @@
 import sqlite3
 from collections import namedtuple
+from prettytable import PrettyTable
 
 DATABASE = ":memory:"
 
-NAMEDTUPLE_FIELDS = ["table_name", "file", "fields", ]
-Users, Purchases = namedtuple("Users", NAMEDTUPLE_FIELDS), namedtuple("Purchases", NAMEDTUPLE_FIELDS)
-USERS = Users("users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))", )
-PURCHASES = Purchases("purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)", )
+META_FIELDS = ["table_name", "file", "fields", ]
+Users, Purchases = namedtuple("Users", META_FIELDS), namedtuple("Purchases", META_FIELDS)
+USERS_META = Users("users", "users.txt", "(id INT, confirmed TEXT, email VARCHAR(320), name VARCHAR(320))", )
+PURCHASES_META = Purchases("purchases", "purchases.txt", "(id INT, user_id INT, date TEXT, sum INT, item_id INT)", )
 
 
 def read(txt_file):
@@ -47,27 +48,32 @@ def prepare_db_tables(con, *table_obj_seq):
         insert_many(con, table_name=table_obj.table_name, table=table)
 
 
-def select_join(con):
-    """Вывести email, имя и сумму всех покупок подтвержденных пользователей за 2 и 3 сентября"""
+def cursor_execute(con, query: str):
     con_cursor = con.cursor()
-    con_cursor.execute(
-        "SELECT users.email, users.name, purchases.sum FROM users "
-        "INNER JOIN purchases ON users.id = purchases.user_id "
-        "WHERE purchases.date LIKE '2017-09-02%' OR purchases.date LIKE '2017-09-03%' "
-        "AND users.confirmed='t'"
-    )
-    return con_cursor.fetchall()
+    con_cursor.execute(query)
+    return con_cursor
 
 
-def display(query):
-    for obj in query:
-        print(obj)
+def display(con_cursor, fetch_method="fetchall"):
+    field_names = list(map(lambda x: x[0], con_cursor.description))
+    query_result = getattr(con_cursor, fetch_method)()
+
+    x = PrettyTable()
+    x.field_names = field_names
+    for obj in query_result:
+        x.add_row(list(obj))
+    print(x)
 
 
 if __name__ == "__main__":
+    JOIN_QUERY = """\
+    SELECT name, email, SUM(sum) as total FROM purchases \
+    INNER JOIN users ON users.id = purchases.user_id \
+    WHERE confirmed='t' \
+    AND purchases.date LIKE '2017-09-02%' OR purchases.date LIKE '2017-09-03%' \
+    GROUP BY name"""
     con = create_db_connection()
     with con:
-        prepare_db_tables(con, USERS, PURCHASES)
-        join_result = select_join(con)
+        prepare_db_tables(con, USERS_META, PURCHASES_META)
+        join_result = cursor_execute(con, query=JOIN_QUERY)
     display(join_result)
-    assert len(join_result) == 13
